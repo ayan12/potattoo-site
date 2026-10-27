@@ -34,6 +34,9 @@ h2 i{color:var(--pink)}
 .logo{font-family:"Bodoni Moda",serif;font-style:italic;font-size:28px;color:#fff}
 .navr{display:flex;gap:26px;align-items:center;font-weight:700;font-size:15px;color:#fff}
 @media (max-width:700px){.navr .hide-m{display:none}}
+.nav{transition:background .35s,padding .35s;padding-bottom:12px}
+.nav.on{mix-blend-mode:normal;background:rgba(20,15,20,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:10px}
+.nav.on .logo{font-size:24px}
 
 /* HERO */
 .hero{position:relative;height:100svh;min-height:680px;overflow:hidden}
@@ -54,7 +57,7 @@ h2 i{color:var(--pink)}
 .intro em{color:var(--pink)}
 
 /* SKETCH TO SKIN (pinned) */
-.s2s{position:relative;height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(24px,5vw,80px)}
+.s2s{position:relative;height:100svh;padding-top:72px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(24px,5vw,80px)}
 .frame{position:relative;height:min(78svh,620px);aspect-ratio:372/404;max-width:100%;justify-self:center;border-radius:12px;overflow:hidden}
 .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .frame .top{clip-path:inset(0 0 var(--c,0%) 0)}
@@ -64,10 +67,10 @@ h2 i{color:var(--pink)}
 .s2s .lab span{border:1.5px solid var(--line);border-radius:99px;padding:6px 14px;font-weight:800;font-size:14px;transition:.3s}
 .s2s .lab span.on{background:var(--bone);color:var(--bg);border-color:var(--bone)}
 .s2s p{color:var(--dim);max-width:40ch;margin:0}
-@media (max-width:800px){.s2s{grid-template-columns:1fr;align-content:center;gap:20px}.frame{height:52svh}.s2s .txt{text-align:center;justify-items:center}}
+@media (max-width:800px){.s2s{grid-template-columns:1fr;align-content:center;gap:18px;padding-bottom:76px}.frame{height:44svh}.hz{padding-bottom:70px}.hz .head{margin-bottom:20px}.s2s .txt{text-align:center;justify-items:center}}
 
 /* HORIZONTAL GALLERY */
-.hz{position:relative;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.hz{position:relative;height:100svh;overflow:hidden;padding-top:64px;display:flex;flex-direction:column;justify-content:center}
 .hz .head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px}
 .track{display:flex;gap:clamp(16px,2.4vw,34px);padding-left:max(20px,env(safe-area-inset-left,0px));width:max-content;will-change:transform}
 .it{position:relative;flex:none;width:clamp(230px,24vw,340px);border:none;padding:0;background:none;text-align:left}
@@ -145,7 +148,7 @@ dialog img{width:100%;border-radius:14px}
 .sticky.show{transform:none}
 .sticky .btn{flex:1;justify-content:center;padding:14px 10px;background:var(--bg)}
 .sticky .btn.pink{background:var(--pink)}
-@media (max-width:860px){.sticky{display:flex}}
+@media (max-width:860px){.sticky{display:flex}.end{padding-bottom:96px!important}}
 </style>
 
 <div id="cur"></div>
@@ -400,5 +403,6 @@ show(0);
 const st=$('#sticky'),pl=$('#plan');addEventListener('scroll',()=>{const r=pl.getBoundingClientRect();st.classList.toggle('show',scrollY>innerHeight*.8&&!(r.top<innerHeight&&r.bottom>0))},{passive:true});
 })();
 </script>
+<script>(function(){const n=document.querySelector('.nav'),f=()=>n.classList.toggle('on',scrollY>innerHeight*.6);addEventListener('scroll',f,{passive:true});f()})();</script>
 
 </body></html>
