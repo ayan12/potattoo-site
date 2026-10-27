@@ -35,7 +35,7 @@ h2 i{color:var(--pink)}
 .navr{display:flex;gap:26px;align-items:center;font-weight:700;font-size:15px;color:#fff}
 @media (max-width:700px){.navr .hide-m{display:none}}
 .nav{transition:background .35s,padding .35s;padding-bottom:12px}
-.nav.on{mix-blend-mode:normal;background:rgba(20,15,20,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:10px}
+.nav.on{mix-blend-mode:normal;background:rgba(20,15,20,.96);border-bottom:1px solid rgba(255,255,255,.08);padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:10px}
 .nav.on .logo{font-size:24px}
 
 /* HERO */
@@ -260,7 +260,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,fine=matchMe
 const hasG=typeof gsap!=='undefined';
 if(hasG&&typeof ScrollTrigger!=='undefined')gsap.registerPlugin(ScrollTrigger);
 let lenis=null;
-if(!reduce&&typeof Lenis!=='undefined'&&hasG){lenis=new Lenis({lerp:.09});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+if(!reduce&&typeof Lenis!=='undefined'&&hasG){lenis=new Lenis({lerp:.14});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
   $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();lenis.scrollTo(t,{offset:0,duration:1.4})}}))}
 
 /* ===== split headline letters ===== */
@@ -277,7 +277,7 @@ const compC=document.createElement('canvas'),kx=compC.getContext('2d');
 const vineC=document.createElement('canvas'),vx=vineC.getContext('2d');
 const imgs=PIECES.map(p=>{const i=new Image();i.src='img/'+p[0]+'.jpg';return i});
 let W,H,D,F={x:0,y:0,w:0,h:0},idx=0,rev=[],deco=[],revealT=0,swapT=0;
-function size(){D=Math.min(devicePixelRatio||1,2);W=hero.clientWidth;H=hero.clientHeight;
+function size(){D=Math.min(devicePixelRatio||1,1.5);W=hero.clientWidth;H=hero.clientHeight;
   [cv,vineC].forEach(c=>{c.width=W*D;c.height=H*D});cx.setTransform(D,0,0,D,0,0);vx.setTransform(D,0,0,D,0,0);
   const fw=Math.min(W*.62,H*.56*372/404,400);F={w:fw,h:fw*404/372,x:(W-fw)/2,y:(H-fw*404/372)/2-(W<700?H*.04:0)};
   [maskC,compC].forEach(c=>{c.width=F.w*D;c.height=F.h*D});mx.setTransform(D,0,0,D,0,0);kx.setTransform(D,0,0,D,0,0);restart()}
@@ -291,7 +291,9 @@ function bloom(x,y,r){vx.save();vx.translate(x,y);vx.rotate(Math.random()*6);vx.
   for(let k=0;k<5;k++){vx.rotate(Math.PI*2/5);vx.beginPath();vx.moveTo(0,0);vx.bezierCurveTo(r*.5,-r*.5,r*1.1,-r*.25,r,0);vx.bezierCurveTo(r*1.1,r*.25,r*.5,r*.5,0,0);vx.stroke()}
   vx.fillStyle='#ff6f9a';vx.beginPath();vx.arc(0,0,r*.16,0,7);vx.fill();vx.restore()}
 function seedDeco(){const e=[[F.x,F.y+F.h*.3,Math.PI],[F.x+F.w,F.y+F.h*.7,0],[F.x+F.w*.3,F.y+F.h,Math.PI/2],[F.x+F.w*.7,F.y,-Math.PI/2]];e.forEach(p=>addDeco(p[0],p[1],p[2]+(Math.random()-.5)*.6,2.2))}
+let heroVis=true;new IntersectionObserver(es=>{const v=es[0].isIntersecting;if(v&&!heroVis){heroVis=true;requestAnimationFrame(frame)}heroVis=v}).observe(hero);
 function frame(){
+  if(!heroVis||document.hidden){if(document.hidden)setTimeout(()=>requestAnimationFrame(frame),500);return}
   revealT++;swapT++;
   // grow reveal vines in mask
   mx.lineCap='round';mx.strokeStyle='#000';
@@ -331,7 +333,7 @@ hero.addEventListener('click',e=>{if(e.target.closest('a,button'))return;next()}
 
 /* ===== cursor ===== */
 const cur=$('#cur');if(fine){let tx=innerWidth/2,ty=innerHeight/2,x=tx,y=ty;addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY});
-  (function lp(){x+=(tx-x)*.2;y+=(ty-y)*.2;cur.style.transform='translate('+x+'px,'+y+'px)';requestAnimationFrame(lp)})();
+  let run=false;const lp=()=>{x+=(tx-x)*.2;y+=(ty-y)*.2;cur.style.transform='translate3d('+x+'px,'+y+'px,0)';if(Math.abs(tx-x)+Math.abs(ty-y)>.3)requestAnimationFrame(lp);else run=false};addEventListener('pointermove',()=>{if(!run){run=true;requestAnimationFrame(lp)}},{passive:true});
   document.addEventListener('pointerover',e=>{const t=e.target.closest('[data-cursor]');if(t){cur.classList.add('big');cur.textContent=t.dataset.cursor}else if(e.target.closest('#hc')){cur.classList.add('big');cur.textContent='Tap'}else{cur.classList.remove('big');cur.textContent=''}})}
 
 /* ===== magnetic buttons ===== */
